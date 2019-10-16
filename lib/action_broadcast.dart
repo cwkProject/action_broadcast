@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 /// 广播事件
-class Intent {
+class ActionIntent {
   /// 事件标识
   final String action;
 
@@ -17,7 +17,7 @@ class Intent {
   /// 创建广播事件
   ///
   /// 用于在广播系统中传递
-  Intent(this.action, {this.data, Map<String, dynamic> extras})
+  ActionIntent(this.action, {this.data, Map<String, dynamic> extras})
       : assert(action != null),
         this.extras = extras != null ? Map.from(extras) : Map();
 
@@ -25,7 +25,7 @@ class Intent {
   ///
   /// 用于在广播系统中传递，
   /// 使用原始额外附加数据集合，这通常是危险的，因为原始额外附加数据集合[extras]对象的值可能被意图接收者修改
-  const Intent.raw(this.action, this.data, this.extras)
+  const ActionIntent.raw(this.action, this.data, this.extras)
       : assert(action != null),
         assert(extras != null);
 
@@ -39,7 +39,7 @@ class Intent {
 }
 
 /// 广播发送器
-final StreamController<Intent> _controller = StreamController.broadcast();
+final StreamController<ActionIntent> _controller = StreamController.broadcast();
 
 /// 注册广播接收器
 ///
@@ -77,7 +77,7 @@ final StreamController<Intent> _controller = StreamController.broadcast();
 /// }
 ///
 /// ```
-Stream<Intent> registerReceiver([List<String> actions]) =>
+Stream<ActionIntent> registerReceiver([List<String> actions]) =>
     _controller.stream.where(
             (intent) => actions != null ? actions.contains(intent.action) : true);
 
@@ -87,17 +87,17 @@ Stream<Intent> registerReceiver([List<String> actions]) =>
 /// * [data]为单一附加数据，通常适用于仅携带单个数据的事件。
 /// * [extras]为额外附加的数据集合，通常适用于携带多个数据的事件。
 /// * [data]和[extras]可以同时使用。
-/// * 当有接收端通过[registerReceiver]注册监听了[action]则他会收到该事件的[Intent]。
+/// * 当有接收端通过[registerReceiver]注册监听了[action]则他会收到该事件的[ActionIntent]。
 void sendBroadcast(String action, {dynamic data, Map<String, dynamic> extras}) {
   assert(action != null);
-  _controller.add(Intent(action, data: data, extras: extras));
+  _controller.add(ActionIntent(action, data: data, extras: extras));
 }
 
 /// 发送广播
 ///
 /// * [intent]为事件。
 /// * 当有接收端通过[registerReceiver]注册监听了[action]则他会收到该[intent]。
-void sendIntentBroadcast(Intent intent) {
+void sendIntentBroadcast(ActionIntent intent) {
   assert(intent != null);
   _controller.add(intent);
 }

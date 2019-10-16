@@ -1,6 +1,6 @@
 name: action_broadcast
 description: 一个简单的全局广播系统，类似于Android的本地广播
-version: 1.0.0
+version: 2.0.0
 author: 超悟空 <cwk39251474@gmail.com>
 homepage: https://github.com/cwkProject/action_broadcast
 publish_to: https://pub.dartlang.org
