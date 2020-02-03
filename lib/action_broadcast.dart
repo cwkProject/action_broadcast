@@ -78,8 +78,7 @@ final StreamController<ActionIntent> _controller = StreamController.broadcast();
 ///
 /// ```
 Stream<ActionIntent> registerReceiver([List<String> actions]) =>
-    _controller.stream.where(
-            (intent) => actions != null ? actions.contains(intent.action) : true);
+    _controller.stream.where((intent) => actions != null ? actions.contains(intent.action) : true);
 
 /// 发送广播
 ///
@@ -127,12 +126,29 @@ mixin AutoCancelStreamMixin<T extends StatefulWidget> on State<T> {
   /// 当前管理的[StreamSubscription]集合
   final _streamSubscriptions = List<StreamSubscription>();
 
+  /// 是否首次执行
+  bool _first = true;
+
   @override
   void initState() {
     super.initState();
-
-    registerSubscriptions.forEach(addSubscription);
+    if (firstAtInitState) {
+      _first = false;
+      registerSubscriptions.forEach(addSubscription);
+    }
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_first) {
+      _first = false;
+      registerSubscriptions.forEach(addSubscription);
+    }
+  }
+
+  /// 是否在[initState]中装配[registerSubscriptions]
+  bool get firstAtInitState => false;
 
   /// 监听并注册[StreamSubscription]
   ///
