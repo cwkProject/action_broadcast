@@ -1,3 +1,7 @@
+## [2.1.1] - 2020/2/5
+
+* 修改`registerSubscriptions`的注释描述
+
 ## [2.1.0] - 2020/2/3
 
 * 修改`AutoCancelStreamMixin`中的`registerSubscriptions`默认在首次执行`didChangeDependencies`时装配，

@@ -150,10 +150,12 @@ mixin AutoCancelStreamMixin<T extends StatefulWidget> on State<T> {
   /// 是否在[initState]中装配[registerSubscriptions]
   bool get firstAtInitState => false;
 
-  /// 监听并注册[StreamSubscription]
+  /// 自动监听并注册[StreamSubscription]
   ///
-  /// 该方法在[initState]中被执行一次，通过[addSubscription]加入管理器。
-  /// 需要在[State]初始化时添加监听器，子类需要实现该方法监听[Stream]并返回[StreamSubscription]。
+  /// 如果[firstAtInitState]是false(默认),则该方法在首次[didChangeDependencies]中被执行一次，
+  /// 如果[firstAtInitState]为true，则该方法在[initState]中被执行一次且[didChangeDependencies]不再执行，
+  /// 通过[addSubscription]加入管理器。
+  /// 需要在[State]初始化时添加一次的监听器，子类可以通过实现该方法监听[Stream]并返回[StreamSubscription]。
   @protected
   Iterable<StreamSubscription> get registerSubscriptions => [];
 
