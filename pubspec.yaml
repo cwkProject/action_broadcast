@@ -1,6 +1,7 @@
 name: action_broadcast
-description: 一个简单的全局广播系统，类似于Android的本地广播
-version: 2.1.1
+description: A simple global broadcast system, similar to Android's local broadcast.
+
+version: 2.1.2
 author: 超悟空 <cwk39251474@gmail.com>
 homepage: https://github.com/cwkProject/action_broadcast
 publish_to: https://pub.dartlang.org
@@ -15,6 +16,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  pedantic: ^1.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

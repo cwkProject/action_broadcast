@@ -1,7 +1,10 @@
 library action_broadcast;
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+export 'dart:async';
 
 /// 广播事件
 class ActionIntent {
@@ -19,7 +22,7 @@ class ActionIntent {
   /// 用于在广播系统中传递
   ActionIntent(this.action, {this.data, Map<String, dynamic> extras})
       : assert(action != null),
-        this.extras = extras != null ? Map.from(extras) : Map();
+        extras = extras != null ? Map.of(extras) : {};
 
   /// 创建广播事件
   ///
@@ -124,7 +127,7 @@ void sendIntentBroadcast(ActionIntent intent) {
 /// ```
 mixin AutoCancelStreamMixin<T extends StatefulWidget> on State<T> {
   /// 当前管理的[StreamSubscription]集合
-  final _streamSubscriptions = List<StreamSubscription>();
+  final _streamSubscriptions = <StreamSubscription>[];
 
   /// 是否首次执行
   bool _first = true;
