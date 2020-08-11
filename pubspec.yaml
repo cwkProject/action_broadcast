@@ -1,8 +1,7 @@
 name: action_broadcast
 description: A simple global broadcast system, similar to Android's local broadcast.
 
-version: 2.1.2
-author: 超悟空 <cwk39251474@gmail.com>
+version: 2.1.3
 homepage: https://github.com/cwkProject/action_broadcast
 publish_to: https://pub.dartlang.org
 

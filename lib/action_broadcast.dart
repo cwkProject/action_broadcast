@@ -81,7 +81,8 @@ final StreamController<ActionIntent> _controller = StreamController.broadcast();
 ///
 /// ```
 Stream<ActionIntent> registerReceiver([List<String> actions]) =>
-    _controller.stream.where((intent) => actions != null ? actions.contains(intent.action) : true);
+    _controller.stream.where(
+        (intent) => actions != null ? actions.contains(intent.action) : true);
 
 /// 发送广播
 ///
