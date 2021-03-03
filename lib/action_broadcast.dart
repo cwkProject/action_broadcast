@@ -8,37 +8,31 @@ export 'dart:async';
 
 /// 广播事件
 class ActionIntent {
+  /// 创建广播事件
+  ///
+  /// 用于在广播系统中传递
+  ActionIntent(this.action, {this.data, Map<String, dynamic?>? extras}) {
+    if (extras != null) {
+      this.extras.addAll(extras);
+    }
+  }
+
   /// 事件标识
   final String action;
 
   /// 额外附加数据集合
-  final Map<String, dynamic> extras;
+  final extras = <String, dynamic?>{};
 
   /// 单一附加数据
-  final dynamic data;
-
-  /// 创建广播事件
-  ///
-  /// 用于在广播系统中传递
-  ActionIntent(this.action, {this.data, Map<String, dynamic> extras})
-      : assert(action != null),
-        extras = extras != null ? Map.of(extras) : {};
-
-  /// 创建广播事件
-  ///
-  /// 用于在广播系统中传递，
-  /// 使用原始额外附加数据集合，这通常是危险的，因为原始额外附加数据集合[extras]对象的值可能被意图接收者修改
-  const ActionIntent.raw(this.action, this.data, this.extras)
-      : assert(action != null),
-        assert(extras != null);
+  final dynamic? data;
 
   /// 获取一个附加数据
   ///
   /// 如果广播事件没有携带数据或[key]不存在则返回null
-  dynamic operator [](String key) => extras[key];
+  dynamic? operator [](String key) => extras[key];
 
   /// 填充一个附加数据[key]
-  void operator []=(String key, Object value) => extras[key] = value;
+  void operator []=(String key, Object? value) => extras[key] = value;
 }
 
 /// 广播发送器
@@ -80,9 +74,9 @@ final StreamController<ActionIntent> _controller = StreamController.broadcast();
 /// }
 ///
 /// ```
-Stream<ActionIntent> registerReceiver([List<String> actions]) =>
-    _controller.stream.where(
-        (intent) => actions != null ? actions.contains(intent.action) : true);
+Stream<ActionIntent> registerReceiver([List<String>? actions]) =>
+    _controller.stream
+        .where((intent) => actions?.contains(intent.action) ?? true);
 
 /// 发送广播
 ///
@@ -91,19 +85,15 @@ Stream<ActionIntent> registerReceiver([List<String> actions]) =>
 /// * [extras]为额外附加的数据集合，通常适用于携带多个数据的事件。
 /// * [data]和[extras]可以同时使用。
 /// * 当有接收端通过[registerReceiver]注册监听了[action]则他会收到该事件的[ActionIntent]。
-void sendBroadcast(String action, {dynamic data, Map<String, dynamic> extras}) {
-  assert(action != null);
-  _controller.add(ActionIntent(action, data: data, extras: extras));
-}
+void sendBroadcast(String action,
+        {dynamic? data, Map<String, dynamic?>? extras}) =>
+    _controller.add(ActionIntent(action, data: data, extras: extras));
 
 /// 发送广播
 ///
 /// * [intent]为事件。
 /// * 当有接收端通过[registerReceiver]注册监听了[action]则他会收到该[intent]。
-void sendIntentBroadcast(ActionIntent intent) {
-  assert(intent != null);
-  _controller.add(intent);
-}
+void sendIntentBroadcast(ActionIntent intent) => _controller.add(intent);
 
 /// 在[State.dispose]中自动取消[Stream]的mixin类
 ///
@@ -165,13 +155,11 @@ mixin AutoCancelStreamMixin<T extends StatefulWidget> on State<T> {
 
   /// 将一个[subscription]添加到自动管理集合
   void addSubscription(StreamSubscription subscription) {
-    if (subscription != null) {
-      _streamSubscriptions.add(subscription);
-    }
+    _streamSubscriptions.add(subscription);
   }
 
   /// 手动取消[subscription]并将之从自动管理集合中移除
-  void cancelSubscription(StreamSubscription subscription) {
+  void cancelSubscription(StreamSubscription? subscription) {
     if (subscription != null) {
       subscription.cancel();
       _streamSubscriptions.remove(subscription);
