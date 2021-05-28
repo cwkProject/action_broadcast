@@ -11,7 +11,7 @@ class ActionIntent {
   /// 创建广播事件
   ///
   /// 用于在广播系统中传递
-  ActionIntent(this.action, {this.data, Map<String, dynamic?>? extras}) {
+  ActionIntent(this.action, {this.data, Map<String, dynamic>? extras}) {
     if (extras != null) {
       this.extras.addAll(extras);
     }
@@ -21,15 +21,15 @@ class ActionIntent {
   final String action;
 
   /// 额外附加数据集合
-  final extras = <String, dynamic?>{};
+  final extras = <String, dynamic>{};
 
   /// 单一附加数据
-  final dynamic? data;
+  final dynamic data;
 
   /// 获取一个附加数据
   ///
   /// 如果广播事件没有携带数据或[key]不存在则返回null
-  dynamic? operator [](String key) => extras[key];
+  dynamic operator [](String key) => extras[key];
 
   /// 填充一个附加数据[key]
   void operator []=(String key, Object? value) => extras[key] = value;
@@ -86,7 +86,7 @@ Stream<ActionIntent> registerReceiver([List<String>? actions]) =>
 /// * [data]和[extras]可以同时使用。
 /// * 当有接收端通过[registerReceiver]注册监听了[action]则他会收到该事件的[ActionIntent]。
 void sendBroadcast(String action,
-        {dynamic? data, Map<String, dynamic?>? extras}) =>
+        {dynamic data, Map<String, dynamic>? extras}) =>
     _controller.add(ActionIntent(action, data: data, extras: extras));
 
 /// 发送广播
