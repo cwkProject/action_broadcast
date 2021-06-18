@@ -18,6 +18,8 @@
  const actionUserLogin = 'actionUserLogin';
  const actionUserInfoChange = 'actionUserInfoChange';
  const actionLogout = 'actionLogout';
+ 
+ // in State
 
  StreamSubscription receiver;
 
@@ -25,14 +27,17 @@
  void initState() {
     super.initState();
 
-    receiver = registerReceiver(['actionUserLogin','actionUserInfoChange','actionLogout']).listen((intent){
+    receiver = registerReceiver([actionUserLogin, actionUserInfoChange, actionLogout]).listen((intent){
             switch(intent.action){
-                case 'actionUserLogin': accountId = intent.data;
-                             break;
-                case 'actionUserInfoChang': nickname = intent['nickname'];
-                             break;
-                case 'actionLogout': Navigator.pop(context);
-                             break;
+                case actionUserLogin: 
+                  accountId = intent.data;
+                  break;
+                case actionUserInfoChang: 
+                  nickname = intent['nickname'];
+                  break;
+                case actionLogout: 
+                  Navigator.pop(context);
+                  break;
             }
     });
  }
@@ -53,7 +58,7 @@ class _ExampleState extends State<Example> with AutoCancelStreamMixin{
 
   @override
   Iterable<StreamSubscription> get registerSubscriptions sync* {
-    yield registerReceiver([actionExample]).listen((intent) {
+    yield registerReceiver([actionUserLogin]).listen((intent) {
         setState(() {
           // do something
         });
@@ -67,6 +72,6 @@ class _ExampleState extends State<Example> with AutoCancelStreamMixin{
 
 ## Notify
 
-`sendBroadcast(actionUserLogin,extras:{'accountId':'adc'});`
+`sendBroadcast(actionUserLogin, extras: {'accountId':'adc'});`
 
-`sendBroadcast(actionUserInfoChang,data:'nickname');`
+`sendBroadcast(actionUserInfoChang, data: 'nickname');`
