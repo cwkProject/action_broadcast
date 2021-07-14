@@ -1,3 +1,7 @@
+## [3.0.1+1] - 2021/7/14
+
+* documentation fixes
+
 ## [3.0.1] - 2021/5/28
 
 * clean code

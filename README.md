@@ -72,6 +72,8 @@ class _ExampleState extends State<Example> with AutoCancelStreamMixin{
 
 ## Notify
 
-`sendBroadcast(actionUserLogin, extras: {'accountId':'adc'});`
+`sendBroadcast(actionUserLogin, data : 'accountId');`
 
-`sendBroadcast(actionUserInfoChang, data: 'nickname');`
+`sendBroadcast(actionUserInfoChang, extras: {'nickname' : 'asdasd'});`
+
+`sendBroadcast(actionLogout);`
