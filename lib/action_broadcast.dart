@@ -36,7 +36,9 @@ class ActionIntent {
 }
 
 /// 广播发送器
-final StreamController<ActionIntent> _controller = StreamController.broadcast();
+StreamController<ActionIntent> get _controller =>
+    _controllerImp ??= StreamController.broadcast();
+StreamController<ActionIntent>? _controllerImp;
 
 /// 注册广播接收器
 ///
@@ -45,7 +47,7 @@ final StreamController<ActionIntent> _controller = StreamController.broadcast();
 /// * 方法返回独立创建的[Stream.isBroadcast]为true类型的[Stream]。
 /// * 监听广播后必须由监听者自己管理[StreamSubscription]并在离开时调用[StreamSubscription.cancel]注销广播接收。
 ///
-/// ``` example
+/// ```dart
 ///
 /// StreamSubscription receiver;
 ///
@@ -77,6 +79,37 @@ final StreamController<ActionIntent> _controller = StreamController.broadcast();
 Stream<ActionIntent> registerReceiver([List<String>? actions]) =>
     _controller.stream
         .where((intent) => actions?.contains(intent.action) ?? true);
+
+/// 注册单一action广播接收器
+///
+/// * 用于接收[sendBroadcast]或[sendIntentBroadcast]发送的广播，
+/// * 通过传入[actions]来监听特定的广播事件，如果actions为null则表示监听所有事件。
+/// * 方法返回独立创建的[Stream.isBroadcast]为true类型的[Stream]。
+/// * 监听广播后必须由监听者自己管理[StreamSubscription]并在离开时调用[StreamSubscription.cancel]注销广播接收。
+///
+/// ```dart
+///
+/// StreamSubscription receiver;
+///
+/// @override
+/// void initState() {
+///  super.initState();
+///
+/// receiver = registerSingleReceiver('actionUserLogin').listen((intent){
+///   accountId = intent['accountId'];
+/// });
+///
+/// }
+///
+/// @override
+/// void dispose(){
+///   receiver.cancel();
+///   super.dispose();
+/// }
+///
+/// ```
+Stream<ActionIntent> registerSingleReceiver(String action) =>
+    _controller.stream.where((intent) => intent.action == action);
 
 /// 发送广播
 ///
@@ -128,7 +161,7 @@ mixin AutoCancelStreamMixin<T extends StatefulWidget> on State<T> {
     super.initState();
     if (firstAtInitState) {
       _first = false;
-      registerSubscriptions.forEach(addSubscription);
+      _streamSubscriptions.addAll(registerSubscriptions);
     }
   }
 
@@ -137,7 +170,7 @@ mixin AutoCancelStreamMixin<T extends StatefulWidget> on State<T> {
     super.didChangeDependencies();
     if (_first) {
       _first = false;
-      registerSubscriptions.forEach(addSubscription);
+      _streamSubscriptions.addAll(registerSubscriptions);
     }
   }
 
@@ -156,14 +189,6 @@ mixin AutoCancelStreamMixin<T extends StatefulWidget> on State<T> {
   /// 将一个[subscription]添加到自动管理集合
   void addSubscription(StreamSubscription subscription) {
     _streamSubscriptions.add(subscription);
-  }
-
-  /// 手动取消[subscription]并将之从自动管理集合中移除
-  void cancelSubscription(StreamSubscription? subscription) {
-    if (subscription != null) {
-      subscription.cancel();
-      _streamSubscriptions.remove(subscription);
-    }
   }
 
   /// 手动取消自动管理集合中的[StreamSubscription]并清空集合

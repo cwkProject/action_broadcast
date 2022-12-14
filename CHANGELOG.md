@@ -1,3 +1,7 @@
+## [3.0.2] - 2022/12/14
+
+* 增加注册单个action的方法`registerSingleReceiver`
+
 ## [3.0.1+1] - 2021/7/14
 
 * documentation fixes

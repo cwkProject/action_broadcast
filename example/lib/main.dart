@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -28,13 +30,13 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -48,7 +50,7 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State createState() => _MyHomePageState();
 }
 
 /// 加法事件
@@ -65,7 +67,8 @@ class _MyHomePageState extends State<MyHomePage> with AutoCancelStreamMixin {
 
   @override
   Iterable<StreamSubscription> get registerSubscriptions sync* {
-    yield registerReceiver([actionIncrement, actionDecrease, actionChange]).listen((intent) {
+    yield registerReceiver([actionIncrement, actionDecrease, actionChange])
+        .listen((intent) {
       switch (intent.action) {
         case actionIncrement:
           setState(() {
@@ -119,16 +122,14 @@ class _MyHomePageState extends State<MyHomePage> with AutoCancelStreamMixin {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
+            const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
             const SizedBox(height: 72),
-            FlatButton(
-              child: Text('Decrease'),
+            TextButton(
+              child: const Text('Decrease'),
               onPressed: () {
                 sendBroadcast(actionDecrease);
               },
@@ -152,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> with AutoCancelStreamMixin {
           sendBroadcast(actionIncrement);
         },
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

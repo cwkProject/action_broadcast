@@ -64,6 +64,13 @@ class _ExampleState extends State<Example> with AutoCancelStreamMixin{
         });
       },
     );
+    
+    yield registerSingleReceiver(actionLogout).listen((intent) {
+        setState(() {
+          // do something
+        });
+      },
+    );
   }
 
 }
